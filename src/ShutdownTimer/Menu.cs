@@ -52,6 +52,10 @@ namespace ShutdownTimer
             ExceptionHandler.Log("Setting up form...");
 
             versionLabel.Text = "v" + Application.ProductVersion.Remove(Application.ProductVersion.LastIndexOf(".")); // Display current version
+#if DEBUG
+            versionLabel.Text += "_debug";
+#endif
+
             infoToolTip.SetToolTip(gracefulCheckBox, "Applications that do not exit when prompted automatically get terminated by default to ensure a successful shutdown." +
                 "\n\nA graceful shutdown on the other hand will wait for all applications to exit before continuing with the shutdown." +
                 "\nThis might result in an unsuccessful shutdown if one or more applications are unresponsive or require a user interaction to exit!");
