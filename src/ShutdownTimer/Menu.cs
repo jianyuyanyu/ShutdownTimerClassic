@@ -62,6 +62,8 @@ namespace ShutdownTimer
             infoToolTip.SetToolTip(preventSleepCheckBox, "Depending on the power settings of your system, it might go to sleep after certain amount of time due to inactivity." +
                 "\nThis option will keep the system awake to ensure the timer can properly run and execute a shutdown.");
             infoToolTip.SetToolTip(backgroundCheckBox, "This will launch the countdown without a visible window but will show a tray icon in your taskbar.");
+            infoToolTip.SetToolTip(countdownModeRadioButton, "Will count down from the hours, minutes and seconds selected below\nlike a countdown timer and execute the power action when it reaches zero.");
+            infoToolTip.SetToolTip(timeOfDayModeRadioButton, "In this mode you can select the target time of day (24h clock) for the power action.\nIf the time has already passed, it will roll over to tomorrow.\n\nWhen you press start, the appropriate countdown will be calculated.\n");
 
             ExceptionHandler.Log("Setup finished");
         }

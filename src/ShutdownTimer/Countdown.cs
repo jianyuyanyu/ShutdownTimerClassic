@@ -360,15 +360,15 @@ namespace ShutdownTimer
         }
 
         /// <summary>
-        /// Updates the countdown with a new timespan
+        /// Shows a Dialog for setting a new countdown time
         /// </summary>
-        private void UpdateTimer()
+        private void ShowNewTimespanDialog()
         {
-            ExceptionHandler.Log("Countdown update requested");
+            ExceptionHandler.Log("User requested to set a new timer");
             using (var form = new InputBox())
             {
-                form.Title = "Countdown Update";
-                form.Message = "Enter new time for the countdown in the format of HH:mm:ss or HH:mm";
+                form.Title = "Set a new timer";
+                form.Message = "Enter new time for the countdown in the format of HH:mm:ss or HH:mm.\n\nThis will replace the current timer in place.";
                 TopMost = false;
                 var result = form.ShowDialog();
                 TopMost = !SettingsProvider.Settings.DisableAlwaysOnTop;
@@ -583,11 +583,11 @@ namespace ShutdownTimer
             if (lockState == 1)
             {
                 ExceptionHandler.Log("Attempt halted due to password protection");
-                if (UnlockUIByPassword(true)) { ExceptionHandler.Log("Password protection passed"); UpdateTimer(); }
+                if (UnlockUIByPassword(true)) { ExceptionHandler.Log("Password protection passed"); ShowNewTimespanDialog(); }
             }
             else
             {
-                UpdateTimer();
+                ShowNewTimespanDialog();
             }
         }
 
