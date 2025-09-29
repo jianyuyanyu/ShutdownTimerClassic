@@ -91,7 +91,7 @@ namespace ShutdownTimer
 
             if (SettingsProvider.Settings.TrayIconTheme == "Light") { lighttheme = true; }
             else if (SettingsProvider.Settings.TrayIconTheme == "Dark") { lighttheme = false; }
-            else { lighttheme = WindowsAPIs.GetWindowsLightTheme(); }
+            else { lighttheme = WindowsAPIs.SystemUsesLightTheme(); }
 
             // When the dark theme is selected we are using the light icon to generate contrast (and vise versa), you wouldn't want a white icon on a white background.
             notifyIcon.Icon = lighttheme ? Properties.Resources.icon_dark : Properties.Resources.icon_light;
