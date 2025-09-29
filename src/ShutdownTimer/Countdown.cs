@@ -17,7 +17,6 @@ namespace ShutdownTimer
         private TimeSpan lastStateUITimeSpan; // used to limit UI events that should only be executed once per second instead of once per update
         private bool ignoreClose; // true: cancel close events without asking | false: default behaviour (if ignoreClose == true, allowClose will be ignored)
         private bool allowClose; // true: accept close without asking | false: Ask user to confirm closing
-        private bool animationSwitch = true; // used to switch warning animation colors
         private int lockState = 0; // used for Password Protection free/locked/unlocked
         private int logTimerCounter = 0; // used to log events every 10,000 timer ticks
 
@@ -699,7 +698,10 @@ namespace ShutdownTimer
                         if (ts.Days > 0 || ts.Hours > 0 || ts.Minutes >= 30) { BackColor = Color.ForestGreen; }
                         else if (ts.Minutes >= 10) { BackColor = Color.DarkOrange; }
                         else if (ts.Minutes >= 1) { BackColor = Color.OrangeRed; }
-                        else { WarningAnimation(); }
+                        else {
+                            if (ts.Seconds % 2 == 0) { BackColor = Color.Red; }
+                            else { BackColor = Color.Black; }
+                        }
                     }
                 }
                 else // UI for tray menu
@@ -727,18 +729,6 @@ namespace ShutdownTimer
                 HideUI();
             }
         }
-
-        /// <summary>
-        /// Switches from background color from red to black (and vice versa) when called.
-        /// </summary>
-        private void WarningAnimation()
-        {
-            animationSwitch = !animationSwitch; // Switch animation color
-
-            if (animationSwitch) { BackColor = Color.Red; }
-            else { BackColor = Color.Black; }
-        }
-
         #endregion
     }
 }
