@@ -660,6 +660,12 @@ namespace ShutdownTimer
         /// </summary>
         private void UpdateUI(TimeSpan ts)
         {
+            // display every started second for one second instead of switching directly to the next lower second. makes for smoother display of time.
+            if (ts.Milliseconds > 0)
+            {
+                ts = ts.Add(TimeSpan.FromSeconds(1));
+            }
+
             // log current state every 10,000 ticks (~16 min.)
             if (logTimerCounter <= 0)
             {

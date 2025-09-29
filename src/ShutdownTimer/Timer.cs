@@ -121,18 +121,7 @@ namespace ShutdownTimer
 
         public static TimeSpan GetTimeRemaining()
         {
-            // calculate remaining time (with 1 second added for a smooth start)
-            TimeSpan nicerRemaining = CountdownTimeSpan - clock.Elapsed + new TimeSpan(0, 0, 1);
-
-            if (nicerRemaining > CountdownTimeSpan)
-            {
-                // make sure we are not returning a time larger than our initial time
-                return CountdownTimeSpan;
-            }
-            else
-            {
-                return nicerRemaining;
-            }
+            return CountdownTimeSpan - clock.Elapsed;
         }
 
         // is called by a looping task from Timer.Start()
