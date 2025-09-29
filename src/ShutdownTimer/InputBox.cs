@@ -36,10 +36,5 @@ namespace ShutdownTimer
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
-
-        private void InputBox_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-        }
     }
 }

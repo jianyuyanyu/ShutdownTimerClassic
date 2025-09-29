@@ -370,9 +370,9 @@ namespace ShutdownTimer
                 form.Title = "Set a new timer";
                 form.Message = "Enter new time for the countdown in the format of HH:mm:ss or HH:mm.\n\nThis will replace the current timer in place.";
                 TopMost = false;
-                var result = form.ShowDialog();
+                form.ShowDialog();
                 TopMost = !SettingsProvider.Settings.DisableAlwaysOnTop;
-                if (form.DialogResult == DialogResult.Cancel)
+                if (form.DialogResult == DialogResult.None || form.DialogResult == DialogResult.Cancel)
                 {
                     return;
                 }
