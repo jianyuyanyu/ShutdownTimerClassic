@@ -36,5 +36,10 @@ namespace ShutdownTimer
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+
+        private void inputTextBox_TextChanged(object sender, EventArgs e)
+        {
+            okButton.Enabled = !inputTextBox.Text.Equals("");
+        }
     }
 }

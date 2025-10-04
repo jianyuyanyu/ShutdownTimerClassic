@@ -503,7 +503,7 @@ namespace ShutdownTimer
             string message;
             if (reasonBecauseOfAction)
             {
-                message = "A password is required to unlock this countdown. Please enter your password to execute this action.\n" +
+                message = "This countdown has been protected with a password. Enter your password to release the lock.\n" +
                     "You can re-lock the countdown by clicking on the lock icon afterwards.";
             }
             else
