@@ -9,9 +9,9 @@ namespace ShutdownTimer
     public partial class Countdown : Form
     {
         public string Password { get; set; } // if value is not empty then a password will be required to change or disable the countdown
-        public bool UserLaunch { get; set; } // false if launched from CLI
-        public bool UI { get; set; } // disables UI updates when set to false (used for running in background)
-        public bool Forced { get; set; } // disables all UI controls and exit dialogs
+        public bool IsUserLaunched { get; set; } // false if launched from CLI
+        public bool IsForegroundUI { get; set; } // disables form UI updates when set to false (used for running in background)
+        public bool IsReadOnly { get; set; } // disables all UI controls and exit dialogs when true
 
         private FormWindowState lastStateUIFormWindowState; // used to update UI immediately after WindowState change
         private TimeSpan lastStateUITimeSpan; // used to limit UI events that should only be executed once per second instead of once per update
@@ -108,7 +108,7 @@ namespace ShutdownTimer
 
             TopMost = !SettingsProvider.Settings.DisableAlwaysOnTop;
 
-            if (!UI)
+            if (!IsForegroundUI)
             {
                 ignoreClose = true; // Disable close dialogs and ignore closing from form
                 TopMost = false;
@@ -120,13 +120,13 @@ namespace ShutdownTimer
                 Hide();
             }
 
-            if (Forced)
+            if (IsReadOnly)
             {
                 ignoreClose = true;
                 contextMenuStrip.Enabled = false;
             }
 
-            if (!UserLaunch) // disable restart app menu button because it would also keep the CLI args so the countdown would restart so it's basically useless
+            if (!IsUserLaunched) // disable restart app menu button because it would also keep the CLI args so the countdown would restart so it's basically useless
             {
                 appRestartMenuItem.Enabled = false;
             }
@@ -208,7 +208,7 @@ namespace ShutdownTimer
             ExceptionHandler.Log("Saving settings...");
 
             // Only store last screen position if setting is enabled and countdown is not in background
-            if (SettingsProvider.Settings.RememberLastScreenPositionCountdown && UI)
+            if (SettingsProvider.Settings.RememberLastScreenPositionCountdown && IsForegroundUI)
             {
                 SettingsProvider.Settings.LastScreenPositionCountdown = new LastScreenPosition
                 {
@@ -432,7 +432,7 @@ namespace ShutdownTimer
             TopMost = false;
             ShowInTaskbar = false;
             WindowState = FormWindowState.Minimized;
-            UI = false;
+            IsForegroundUI = false;
             ignoreClose = true; // Prevent closing (and closing dialog) after ShowInTaskbar changed
             UpdateUI(Timer.GetTimeRemaining());
             SendNotification("Timer has been moved to the background. Right-click the tray icon for more info.");
@@ -450,7 +450,7 @@ namespace ShutdownTimer
             if (!SettingsProvider.Settings.DisableAlwaysOnTop) { TopMost = true; }
             ShowInTaskbar = true;
             WindowState = FormWindowState.Normal;
-            UI = true;
+            IsForegroundUI = true;
             ignoreClose = true; // Prevent closing (and closing dialog) after ShowInTaskbar changed
 
             // Re-Enable close question after the main thread has moved on and the close event raised from the this. ShowInTaskbar has been ignored
@@ -688,7 +688,7 @@ namespace ShutdownTimer
                 timeLabel.Text = elapsedTime;
                 timeMenuItem.Text = elapsedTime;
 
-                if (UI) // UI for countdown window
+                if (IsForegroundUI) // UI for countdown window
                 {
                     this.Text = "Countdown";
 
@@ -698,7 +698,8 @@ namespace ShutdownTimer
                         if (ts.Days > 0 || ts.Hours > 0 || ts.Minutes >= 30) { BackColor = Color.ForestGreen; }
                         else if (ts.Minutes >= 10) { BackColor = Color.DarkOrange; }
                         else if (ts.Minutes >= 1) { BackColor = Color.OrangeRed; }
-                        else {
+                        else
+                        {
                             if (ts.Seconds % 2 == 0) { BackColor = Color.Red; }
                             else { BackColor = Color.Black; }
                         }
@@ -718,12 +719,12 @@ namespace ShutdownTimer
             }
 
             // Correct window states if unexpected changes occur
-            if (!UI && WindowState != FormWindowState.Minimized)
+            if (!IsForegroundUI && WindowState != FormWindowState.Minimized)
             {
                 // Window is visible when UI is set to background operation
                 ShowUI();
             }
-            else if (UI && WindowState == FormWindowState.Minimized)
+            else if (IsForegroundUI && WindowState == FormWindowState.Minimized)
             {
                 // Window is hidden when UI is set to foreground operation
                 HideUI();

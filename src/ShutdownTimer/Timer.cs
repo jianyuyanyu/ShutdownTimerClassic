@@ -34,10 +34,10 @@ namespace ShutdownTimer
 
             countdownForm = new Countdown
             {
-                UI = formInForeground,
+                IsForegroundUI = formInForeground,
                 Password = formPassword,
-                Forced = argForced,
-                UserLaunch = userLaunch
+                IsReadOnly = argForced,
+                IsUserLaunched = userLaunch
             };
 
             ExceptionHandler.Log("Starting Countdown form...");
@@ -98,7 +98,8 @@ namespace ShutdownTimer
                 bool wasRunning = clock.IsRunning;
                 ExceptionHandler.Log("Resetting clock");
                 clock.Reset();
-                if (wasRunning) {
+                if (wasRunning)
+                {
                     ExceptionHandler.Log("Starting clock to keep pre-reset state consistent.");
                     clock.Start();
                 }
