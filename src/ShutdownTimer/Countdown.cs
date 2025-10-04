@@ -21,6 +21,11 @@ namespace ShutdownTimer
         private int lockState = 0; // used for Password Protection free/locked/unlocked
         private int logTimerCounter = 0; // used to log events every 10,000 timer ticks
 
+        /**
+         * To the person reading this right now: I'm sorry, I wrote this when I was learning to code quite some time ago.
+         * Yes, it needs some heavy refactoring. Maybe I'll come around to do it at some point, but a cross-platform rewrite seems more likely at that point...
+         */
+
         public Countdown()
         {
             InitializeComponent();
