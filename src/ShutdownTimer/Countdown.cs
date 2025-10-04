@@ -1,5 +1,6 @@
 ﻿using ShutdownTimer.Helpers;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -659,17 +660,10 @@ namespace ShutdownTimer
         /// </summary>
         private void UpdateUI(TimeSpan ts)
         {
-            // display every started second for one second instead of switching directly to the next lower second. makes for smoother display of time.
-            if (ts.Milliseconds > 0)
-            {
-                ts = ts.Add(TimeSpan.FromSeconds(1));
-            }
-
-            // log current state every 10,000 ticks (~16 min.)
             if (logTimerCounter <= 0)
             {
-                ExceptionHandler.Log("Application still alive and counting down: " + Numerics.ConvertTimeSpanToString(ts));
-                logTimerCounter = 10000;
+                ExceptionHandler.Log("Heartbeat: The countdown reads " + Numerics.ConvertTimeSpanToString(ts) + " with memory usage at " + Format.BytesToString(Process.GetCurrentProcess().PrivateMemorySize64) + ". Next heartbeat in 100,000 ticks.");
+                logTimerCounter = 100000;
             }
             else
             {
@@ -677,11 +671,17 @@ namespace ShutdownTimer
             }
 
             // update UI
-            if (lastStateUIFormWindowState != WindowState || Math.Truncate(lastStateUITimeSpan.TotalSeconds) != Math.Truncate(ts.TotalSeconds)) // only if either form state changed or a second passed between updates
+            if (Math.Truncate(lastStateUITimeSpan.TotalSeconds) != Math.Truncate(ts.TotalSeconds)) // only if a full second passed between updates
             {
                 // Save current data to last state memory
                 lastStateUITimeSpan = ts;
                 lastStateUIFormWindowState = WindowState;
+
+                // display every started second for one second instead of switching directly to the next lower second. makes for smoother display of time.
+                if (ts.Milliseconds > 0)
+                {
+                    ts = ts.Add(TimeSpan.FromSeconds(1));
+                }
 
                 // Update time labels
                 string elapsedTime = Numerics.ConvertTimeSpanToString(ts);
@@ -721,12 +721,12 @@ namespace ShutdownTimer
             // Correct window states if unexpected changes occur
             if (!IsForegroundUI && WindowState != FormWindowState.Minimized)
             {
-                // Window is visible when UI is set to background operation
+                ExceptionHandler.Log("Application was set for background operation but form was visible, switching to foreground operation");
                 ShowUI();
             }
             else if (IsForegroundUI && WindowState == FormWindowState.Minimized)
             {
-                // Window is hidden when UI is set to foreground operation
+                ExceptionHandler.Log("Application was set for foreground operation but form was minimized, switching to background operation");
                 HideUI();
             }
         }

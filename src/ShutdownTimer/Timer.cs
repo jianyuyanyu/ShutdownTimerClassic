@@ -67,8 +67,8 @@ namespace ShutdownTimer
                         Console.WriteLine(ex.StackTrace.ToString());
                     }
 
-                    // repeat loop each 200ms
-                    await Task.Delay(200);
+                    // repeat loop each 150ms
+                    await Task.Delay(150);
                 }
             });
         }
