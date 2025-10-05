@@ -52,12 +52,18 @@ namespace ShutdownTimer
             ExceptionHandler.Log("Setting up form...");
 
             versionLabel.Text = "v" + Application.ProductVersion.Remove(Application.ProductVersion.LastIndexOf(".")); // Display current version
+#if DEBUG
+            versionLabel.Text += "_debug";
+#endif
+
             infoToolTip.SetToolTip(gracefulCheckBox, "Applications that do not exit when prompted automatically get terminated by default to ensure a successful shutdown." +
                 "\n\nA graceful shutdown on the other hand will wait for all applications to exit before continuing with the shutdown." +
                 "\nThis might result in an unsuccessful shutdown if one or more applications are unresponsive or require a user interaction to exit!");
             infoToolTip.SetToolTip(preventSleepCheckBox, "Depending on the power settings of your system, it might go to sleep after certain amount of time due to inactivity." +
                 "\nThis option will keep the system awake to ensure the timer can properly run and execute a shutdown.");
             infoToolTip.SetToolTip(backgroundCheckBox, "This will launch the countdown without a visible window but will show a tray icon in your taskbar.");
+            infoToolTip.SetToolTip(countdownModeRadioButton, "Will count down from the hours, minutes and seconds selected below\nlike a countdown timer and execute the power action when it reaches zero.");
+            infoToolTip.SetToolTip(timeOfDayModeRadioButton, "In this mode you can select the target time of day (24h clock) for the power action.\nIf the time has already passed, it will roll over to tomorrow.\n\nWhen you press start, the appropriate countdown will be calculated.\n");
 
             ExceptionHandler.Log("Setup finished");
         }

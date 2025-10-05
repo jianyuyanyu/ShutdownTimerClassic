@@ -15,6 +15,9 @@ namespace ShutdownTimer
         private void Settings_Load(object sender, EventArgs e)
         {
             appLabel.Text = Application.ProductName + "@v" + Application.ProductVersion.Remove(Application.ProductVersion.LastIndexOf("."));
+#if DEBUG
+            appLabel.Text += "_debug";
+#endif
             LoadSettings();
         }
 
